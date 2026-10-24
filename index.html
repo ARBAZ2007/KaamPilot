@@ -1,0 +1,481 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#080f1e">
+  <meta name="description" content="KaamPilot — manage products, orders, marketing and business profits in one workspace.">
+  <title>KaamPilot Pro — Business Workspace</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar" id="sidebar">
+      <a class="brand" href="#dashboard" aria-label="KaamPilot home">
+        <span class="brand-mark">K</span>
+        <span class="brand-copy">
+          <strong>KaamPilot</strong>
+          <small>BUSINESS WORKSPACE</small>
+        </span>
+      </a>
+
+      <div class="workspace-label">WORKSPACE</div>
+      <nav class="navigation" aria-label="Main navigation">
+        <button class="nav-link active" data-page="dashboard">
+          <span class="nav-icon">◫</span><span>Dashboard</span>
+        </button>
+        <button class="nav-link" data-page="products">
+          <span class="nav-icon">▦</span><span>Products</span>
+        </button>
+        <button class="nav-link" data-page="orders">
+          <span class="nav-icon">▤</span><span>Orders</span>
+        </button>
+        <button class="nav-link" data-page="marketing">
+          <span class="nav-icon">✳</span><span>Marketing Studio</span>
+        </button>
+        <button class="nav-link" data-page="profit">
+          <span class="nav-icon">↗</span><span>Profit Calculator</span>
+        </button>
+      </nav>
+
+      <div class="sidebar-spacer"></div>
+
+      <div class="sidebar-note">
+        <span class="note-icon">✦</span>
+        <strong>Small business. Smarter work.</strong>
+        <p>Keep your products, orders and numbers in one place.</p>
+      </div>
+
+      <div class="sidebar-footer">
+        <span class="status-dot"></span>
+        <span>Local workspace</span>
+        <span class="version-label">PRO</span>
+      </div>
+    </aside>
+
+    <main class="main-area">
+      <header class="topbar">
+        <div class="topbar-heading">
+          <button class="mobile-menu" id="mobile-menu" aria-label="Toggle navigation" type="button">☰</button>
+          <div>
+            <div class="eyebrow">YOUR BUSINESS, AT A GLANCE</div>
+            <h1 id="page-title">Dashboard</h1>
+          </div>
+        </div>
+        <div class="top-actions">
+          <span class="live-label"><span></span> Workspace ready</span>
+          <button class="secondary-btn" id="export-backup" type="button">Backup JSON</button>
+          <button class="secondary-btn" id="import-backup-trigger" type="button">Restore backup</button>
+          <input id="import-backup-file" type="file" accept=".json,application/json" hidden>
+          <button class="primary-btn" id="quick-add" type="button">＋ Add product</button>
+        </div>
+      </header>
+
+      <div class="page-container">
+
+        <!-- DASHBOARD -->
+        <section class="page active" id="dashboard">
+          <div class="welcome-row">
+            <div>
+              <p class="eyebrow">BUSINESS OVERVIEW</p>
+              <h2>Let's make today productive.</h2>
+              <p class="muted">A clear view of your inventory, orders and performance.</p>
+            </div>
+            <div class="date-chip" id="today-label">Your workspace</div>
+          </div>
+
+          <div class="stats-grid">
+            <article class="stat-card">
+              <div class="stat-top"><span class="stat-icon blue">▦</span><span class="stat-tag">Inventory</span></div>
+              <p>Total products</p>
+              <h3 id="stat-products">0</h3>
+              <small>Products in your catalog</small>
+            </article>
+            <article class="stat-card">
+              <div class="stat-top"><span class="stat-icon purple">▤</span><span class="stat-tag">Orders</span></div>
+              <p>Total orders</p>
+              <h3 id="stat-orders">0</h3>
+              <small><span id="stat-pending">0</span> pending orders</small>
+            </article>
+            <article class="stat-card">
+              <div class="stat-top"><span class="stat-icon green">↗</span><span class="stat-tag">Performance</span></div>
+              <p>Estimated profit</p>
+              <h3 id="stat-profit">Rs 0</h3>
+              <small>Completed orders only</small>
+            </article>
+            <article class="stat-card">
+              <div class="stat-top"><span class="stat-icon orange">₨</span><span class="stat-tag">Sales</span></div>
+              <p>Sales revenue</p>
+              <h3 id="stat-revenue">Rs 0</h3>
+              <small>Completed orders only</small>
+            </article>
+            <article class="stat-card">
+              <div class="stat-top"><span class="stat-icon red">!</span><span class="stat-tag">Inventory</span></div>
+              <p>Low stock</p>
+              <h3 id="stat-low-stock">0</h3>
+              <small>Products with 5 or fewer units</small>
+            </article>
+          </div>
+
+          <div class="dashboard-grid">
+            <section class="panel chart-panel">
+              <div class="panel-heading">
+                <div>
+                  <h3>Order overview</h3>
+                  <p>Current order status breakdown</p>
+                </div>
+                <span class="subtle-badge">All time</span>
+              </div>
+              <div class="overview-content">
+                <div class="donut-wrap">
+                  <div class="donut" id="order-donut">
+                    <div class="donut-center">
+                      <strong id="donut-total">0</strong>
+                      <span>Total orders</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="legend-list">
+                  <div class="legend-item"><span class="legend-dot pending-dot"></span><span>Pending</span><strong id="legend-pending">0</strong></div>
+                  <div class="legend-item"><span class="legend-dot completed-dot"></span><span>Completed</span><strong id="legend-completed">0</strong></div>
+                  <div class="legend-item"><span class="legend-dot cancelled-dot"></span><span>Cancelled</span><strong id="legend-cancelled">0</strong></div>
+                </div>
+              </div>
+            </section>
+
+            <section class="panel quick-panel">
+              <div class="panel-heading">
+                <div>
+                  <h3>Quick actions</h3>
+                  <p>Get to work in fewer clicks</p>
+                </div>
+              </div>
+              <button class="quick-action" data-action="add-product" type="button">
+                <span class="quick-action-icon blue">＋</span>
+                <span><strong>Add a product</strong><small>Expand your inventory</small></span>
+                <span class="action-arrow">→</span>
+              </button>
+              <button class="quick-action" data-action="add-order" type="button">
+                <span class="quick-action-icon purple">↗</span>
+                <span><strong>Create an order</strong><small>Record a customer sale</small></span>
+                <span class="action-arrow">→</span>
+              </button>
+              <button class="quick-action" data-page="marketing" type="button">
+                <span class="quick-action-icon green">✳</span>
+                <span><strong>Write marketing copy</strong><small>Prepare a product promotion</small></span>
+                <span class="action-arrow">→</span>
+              </button>
+              <button class="quick-action" data-page="profit" type="button">
+                <span class="quick-action-icon orange">₨</span>
+                <span><strong>Calculate profit</strong><small>Check your margins</small></span>
+                <span class="action-arrow">→</span>
+              </button>
+            </section>
+          </div>
+
+          <section class="panel stock-panel">
+            <div class="panel-heading">
+              <div>
+                <h3>Stock watch</h3>
+                <p>Products that may need restocking soon</p>
+              </div>
+              <button class="text-btn" data-page="products" type="button">Manage inventory →</button>
+            </div>
+            <div id="stock-watch" class="stock-watch">
+              <div class="empty-state">Your inventory alerts will appear here.</div>
+            </div>
+          </section>
+
+          <section class="panel">
+            <div class="panel-heading">
+              <div>
+                <h3>Recent orders</h3>
+                <p>Your latest customer activity</p>
+              </div>
+              <button class="text-btn" data-page="orders" type="button">View all orders →</button>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr><th>Order</th><th>Customer</th><th>Date</th><th>Total</th><th>Status</th></tr>
+                </thead>
+                <tbody id="recent-orders-body"></tbody>
+              </table>
+            </div>
+          </section>
+        </section>
+
+        <!-- PRODUCTS -->
+        <section class="page" id="products">
+          <div class="page-intro">
+            <div>
+              <p class="eyebrow">INVENTORY MANAGEMENT</p>
+              <h2>Products</h2>
+              <p class="muted">Organize your catalog and keep stock levels under control.</p>
+            </div>
+            <button class="primary-btn" id="add-product-btn" type="button">＋ Add product</button>
+          </div>
+          <div class="toolbar">
+            <input class="search-input" id="product-search" type="search" placeholder="Search products or categories…" aria-label="Search products">
+            <select class="search-input" id="product-category-filter" aria-label="Filter products by category">
+              <option value="All">All categories</option>
+            </select>
+            <button class="secondary-btn" id="export-products" type="button">Export CSV</button>
+          </div>
+          <section class="panel">
+            <div class="panel-heading">
+              <div><h3>Product catalog</h3><p id="products-count">0 products</p></div>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr><th>Product</th><th>Category</th><th>Cost price</th><th>Selling price</th><th>Stock</th><th>Actions</th></tr>
+                </thead>
+                <tbody id="products-body"></tbody>
+              </table>
+            </div>
+            <div class="table-footer" id="products-footer"></div>
+          </section>
+        </section>
+
+        <!-- ORDERS -->
+        <section class="page" id="orders">
+          <div class="page-intro">
+            <div>
+              <p class="eyebrow">SALES MANAGEMENT</p>
+              <h2>Orders</h2>
+              <p class="muted">Track customer orders and manage their status.</p>
+            </div>
+            <button class="primary-btn" id="add-order-btn" type="button">＋ Create order</button>
+          </div>
+          <div class="toolbar">
+            <input class="search-input" id="order-search" type="search" placeholder="Search customer, product or order ID…" aria-label="Search orders">
+            <select class="search-input" id="order-filter" aria-label="Filter orders by status">
+              <option value="All">All statuses</option>
+              <option value="Pending">Pending</option>
+              <option value="Completed">Completed</option>
+              <option value="Cancelled">Cancelled</option>
+            </select>
+            <button class="secondary-btn" id="export-orders" type="button">Export CSV</button>
+          </div>
+          <section class="panel">
+            <div class="panel-heading">
+              <div><h3>All orders</h3><p id="orders-count">0 orders</p></div>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr><th>Order</th><th>Customer</th><th>Product</th><th>Quantity</th><th>Total</th><th>Date</th><th>Status</th><th>Actions</th></tr>
+                </thead>
+                <tbody id="orders-body"></tbody>
+              </table>
+            </div>
+            <div class="table-footer" id="orders-footer"></div>
+          </section>
+        </section>
+
+        <!-- MARKETING -->
+        <section class="page" id="marketing">
+          <div class="page-intro">
+            <div>
+              <p class="eyebrow">CONTENT WORKSPACE</p>
+              <h2>Marketing Studio</h2>
+              <p class="muted">Create reusable promotional copy for your products and social channels.</p>
+            </div>
+          </div>
+          <div class="marketing-grid">
+            <section class="panel form-panel">
+              <div class="panel-heading">
+                <div><h3>Campaign details</h3><p>Tell us what you're promoting</p></div>
+              </div>
+              <form id="marketing-form" class="form-stack">
+                <label>Product or service name
+                  <input id="marketing-product" required maxlength="100" placeholder="e.g. Handmade leather wallet">
+                </label>
+                <label>Key benefit or offer
+                  <textarea id="marketing-benefit" rows="3" maxlength="500" placeholder="What makes it useful? Any special offer?"></textarea>
+                </label>
+                <div class="form-row">
+                  <label>Platform
+                    <select id="marketing-platform">
+                      <option value="WhatsApp">WhatsApp</option>
+                      <option value="Instagram">Instagram</option>
+                      <option value="Facebook">Facebook</option>
+                    </select>
+                  </label>
+                  <label>Language
+                    <select id="marketing-language">
+                      <option value="English">English</option>
+                      <option value="Roman Urdu">Roman Urdu</option>
+                      <option value="Simple Urdu">Simple Urdu</option>
+                    </select>
+                  </label>
+                </div>
+                <button class="primary-btn full-btn" type="submit">Generate marketing copy ✦</button>
+              </form>
+            </section>
+            <section class="panel output-panel">
+              <div class="panel-heading">
+                <div><h3>Your draft</h3><p>Edit the text before sharing it</p></div>
+                <span class="subtle-badge">Editable</span>
+              </div>
+              <textarea id="marketing-output" class="marketing-output" rows="14" placeholder="Your generated marketing draft will appear here…"></textarea>
+              <div class="output-actions">
+                <button class="secondary-btn" id="copy-marketing" type="button">Copy text</button>
+                <button class="secondary-btn" id="download-marketing" type="button">Download .txt</button>
+              </div>
+              <p class="help-text">Review prices, claims and offer details before publishing.</p>
+            </section>
+          </div>
+        </section>
+
+        <!-- PROFIT CALCULATOR -->
+        <section class="page" id="profit">
+          <div class="page-intro">
+            <div>
+              <p class="eyebrow">BUSINESS FINANCE</p>
+              <h2>Profit Calculator</h2>
+              <p class="muted">Estimate your revenue, total costs, profit and margin.</p>
+            </div>
+          </div>
+          <div class="calculator-grid">
+            <section class="panel form-panel">
+              <div class="panel-heading">
+                <div><h3>Calculation inputs</h3><p>Enter values for one sale or batch</p></div>
+              </div>
+              <form id="profit-form" class="form-stack">
+                <label>Selling price per unit (Rs)
+                  <input id="calc-price" type="number" min="0" step="0.01" value="500" required>
+                </label>
+                <label>Cost price per unit (Rs)
+                  <input id="calc-cost" type="number" min="0" step="0.01" value="300" required>
+                </label>
+                <label>Quantity
+                  <input id="calc-quantity" type="number" min="1" step="1" value="2" required>
+                </label>
+                <label>Additional expenses (Rs)
+                  <input id="calc-expenses" type="number" min="0" step="0.01" value="50" required>
+                </label>
+                <button class="primary-btn full-btn" type="submit">Calculate profit</button>
+              </form>
+            </section>
+            <section class="panel results-panel">
+              <div class="panel-heading">
+                <div><h3>Calculation results</h3><p>Based on the values you entered</p></div>
+              </div>
+              <div class="result-highlight">
+                <span>Estimated net profit</span>
+                <strong id="calc-result-profit">Rs 350</strong>
+                <small id="calc-result-note">Estimated result before any unlisted costs or taxes</small>
+              </div>
+              <div class="result-list">
+                <div><span>Revenue</span><strong id="calc-result-revenue">Rs 1,000</strong></div>
+                <div><span>Product costs</span><strong id="calc-result-cost">Rs 600</strong></div>
+                <div><span>Additional expenses</span><strong id="calc-result-expenses">Rs 50</strong></div>
+                <div><span>Profit margin</span><strong id="calc-result-margin">35%</strong></div>
+                <div><span>Profit per unit</span><strong id="calc-result-unit">Rs 175</strong></div>
+              </div>
+              <p class="help-text">This is an estimate, not accounting or tax advice.</p>
+            </section>
+          </div>
+        </section>
+      </div>
+
+      <footer class="app-footer">
+        <span>KaamPilot <strong>Pro</strong></span>
+        <span>Simple tools for smarter business decisions.</span>
+        <span>Data stored in this browser</span>
+      </footer>
+    </main>
+  </div>
+
+  <!-- PRODUCT MODAL -->
+  <div class="modal-backdrop" id="product-modal" hidden>
+    <section class="modal" role="dialog" aria-modal="true" aria-labelledby="product-modal-title">
+      <div class="modal-heading">
+        <div><p class="eyebrow">INVENTORY</p><h2 id="product-modal-title">Add product</h2></div>
+        <button class="icon-btn" data-close-modal="product-modal" type="button" aria-label="Close dialog">×</button>
+      </div>
+      <form id="product-form" class="form-stack">
+        <input id="product-id" type="hidden">
+        <label>Product name
+          <input id="product-name" required maxlength="120" placeholder="Enter product name">
+        </label>
+        <label>Category
+          <input id="product-category" maxlength="80" placeholder="e.g. Accessories">
+        </label>
+        <div class="form-row">
+          <label>Cost price (Rs)
+            <input id="product-cost" type="number" min="0" step="0.01" required placeholder="0">
+          </label>
+          <label>Selling price (Rs)
+            <input id="product-price" type="number" min="0" step="0.01" required placeholder="0">
+          </label>
+        </div>
+        <label>Stock quantity
+          <input id="product-stock" type="number" min="0" step="1" required placeholder="0">
+        </label>
+        <div class="modal-actions">
+          <button class="secondary-btn" data-close-modal="product-modal" type="button">Cancel</button>
+          <button class="primary-btn" id="save-product-btn" type="submit">Save product</button>
+        </div>
+      </form>
+    </section>
+  </div>
+
+  <!-- ORDER MODAL -->
+  <div class="modal-backdrop" id="order-modal" hidden>
+    <section class="modal" role="dialog" aria-modal="true" aria-labelledby="order-modal-title">
+      <div class="modal-heading">
+        <div><p class="eyebrow">SALES</p><h2 id="order-modal-title">Create order</h2></div>
+        <button class="icon-btn" data-close-modal="order-modal" type="button" aria-label="Close dialog">×</button>
+      </div>
+      <form id="order-form" class="form-stack">
+        <label>Customer name
+          <input id="order-customer" required maxlength="120" placeholder="Customer name">
+        </label>
+        <label>Product
+          <select id="order-product" required>
+            <option value="">Select a product</option>
+          </select>
+        </label>
+        <div class="form-row">
+          <label>Quantity
+            <input id="order-quantity" type="number" min="1" step="1" value="1" required>
+          </label>
+          <label>Unit selling price (Rs)
+            <input id="order-price" type="number" min="0" step="0.01" required>
+          </label>
+        </div>
+        <p class="help-text" id="order-stock-hint">Select a product to check stock.</p>
+        <label>Notes (optional)
+          <textarea id="order-notes" rows="2" maxlength="500" placeholder="Delivery details or order notes"></textarea>
+        </label>
+        <div class="modal-actions">
+          <button class="secondary-btn" data-close-modal="order-modal" type="button">Cancel</button>
+          <button class="primary-btn" id="save-order-btn" type="submit">Create pending order</button>
+        </div>
+      </form>
+    </section>
+  </div>
+
+  <!-- CONFIRMATION DIALOG -->
+  <div class="modal-backdrop" id="confirm-modal" hidden>
+    <section class="modal confirm-modal" role="dialog" aria-modal="true" aria-labelledby="confirm-title">
+      <div class="modal-heading">
+        <div><p class="eyebrow">PLEASE CONFIRM</p><h2 id="confirm-title">Confirm action</h2></div>
+        <button class="icon-btn" data-close-modal="confirm-modal" type="button" aria-label="Close dialog">×</button>
+      </div>
+      <p id="confirm-message" class="muted">Are you sure you want to continue?</p>
+      <div class="modal-actions">
+        <button class="secondary-btn" data-close-modal="confirm-modal" type="button">Go back</button>
+        <button class="danger-btn" id="confirm-action-btn" type="button">Confirm</button>
+      </div>
+    </section>
+  </div>
+
+  <div class="toast-region" id="toast-region" aria-live="polite" aria-atomic="true"></div>
+</body>
+</html>
